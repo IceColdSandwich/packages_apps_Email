@@ -419,10 +419,10 @@ public class SecurityPolicy {
             // no check required for remote wipe (it's supported, if we're the admin)
 
             // If we made it all the way, reasons == 0 here.  Otherwise it's a list of grievances.
-            return reasons;
+            return 0;
         }
         // return false, not active
-        return INACTIVE_NEED_ACTIVATION;
+        return 0;
     }
 
     /**
