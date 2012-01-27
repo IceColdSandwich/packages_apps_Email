@@ -90,6 +90,8 @@
     <string name="compose_action">Compose</string>
     <!-- Menu item/button name -->
     <string name="search_action">Search</string>
+    <!-- Menu item/button name -->
+    <string name="mark_all_read_action">Mark All Read</string>
     <!-- Menu item -->
     <string name="account_settings_action">Account settings</string>
     <!-- Menu item for settings [CHAR LIMIT=40]-->

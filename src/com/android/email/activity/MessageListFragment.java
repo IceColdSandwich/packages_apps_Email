@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
+/*
+* Modified to have 'Mark All Read Button'
+* @since 01.27.12
+* @author Dustin Jorge
+*/
+
 package com.android.email.activity;
 
 import android.app.Activity;
@@ -72,6 +78,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Maps;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -900,6 +907,18 @@ public class MessageListFragment extends ListFragment
     }
 
     /**
+    * Toggles all read messages to unread. Should be ok to call from UI Thread based on
+    * note on toggleRead method.
+    * 
+    * @author Dustin Jorge
+    * @since 01.27.12
+    */
+    public void toggleAllToRead(){
+        Set<Long> unread = getMatchingSet( MessagesAdapter.COLUMN_READ, false );
+        toggleRead( unread );
+    }
+
+    /**
      * Toggles a set read/unread states.  Note, the default behavior is "mark unread", so the
      * sense of the helper methods is "true=unread"; this may be called from the UI thread
      *
@@ -1031,6 +1050,28 @@ public class MessageListFragment extends ListFragment
             }
         }
         return false;
+    }
+
+    /**
+    * Returns a set of message ids that contain matching column values
+    * @param columnId See MessagesAdapter
+    * @param defaultFlag Flag to test against, method returns 'matching' set 
+    * @author Dustin Jorge
+    * @since 01.27.12
+    */
+    private Set<Long> getMatchingSet( int columnId, boolean defaultFlag ){
+        HashSet<Long> matchSet = new HashSet<Long>();
+        final Cursor c = mListAdapter.getCursor();
+        if(c == null || c.isClosed()){
+            return new HashSet<Long>();
+        }
+        c.moveToPosition(-1);
+        while(c.moveToNext()){
+            if( c.getInt( columnId ) == (defaultFlag ? 1 : 0)){
+                matchSet.add( c.getLong( MessagesAdapter.COLUMN_ID ) );
+            }
+        }
+        return matchSet;
     }
 
     /**

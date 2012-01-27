@@ -564,6 +564,7 @@ class UIControllerOnePane extends UIControllerBase {
             menu.findItem(R.id.search).setVisible(false);
             menu.findItem(R.id.compose).setVisible(false);
             menu.findItem(R.id.refresh).setVisible(false);
+            menu.findItem(R.id.mark_all_read).setVisible(false);
             menu.findItem(R.id.show_all_mailboxes).setVisible(false);
             menu.findItem(R.id.mailbox_settings).setVisible(false);
         }

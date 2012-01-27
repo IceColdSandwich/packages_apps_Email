@@ -83,6 +83,8 @@
     <uses-permission
         android:name="com.android.email.permission.ACCESS_PROVIDER"/>
 
+    <uses-sdk android:minSdkVersion="14"/>
+
     <!-- Note:  Actually, android:hardwareAccelerated could be "true", but in order to switch it
          on/off in the debug screen, we have to set it "false" here and enable it at runtime.  -->
     <application
