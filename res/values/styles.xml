@@ -54,7 +54,7 @@
     </style>
 
     <!-- EditText style without the "tray" -->
-    <style name="PlainEditText" parent="android:Widget.Holo.Light.EditText">
+    <style name="PlainEditText" parent="android:Widget.Holo.EditText">
         <item name="android:background">@null</item>
     </style>
 

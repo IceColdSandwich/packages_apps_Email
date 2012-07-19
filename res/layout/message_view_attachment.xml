@@ -75,7 +75,7 @@
             android:layout_below="@+id/attachment_name"
             android:layout_marginLeft="16dip"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/text_secondary_color"
+            android:textColor="#505050"
             android:singleLine="true"
             android:ellipsize="middle"
             />

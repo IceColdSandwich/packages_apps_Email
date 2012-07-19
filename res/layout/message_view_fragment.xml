@@ -147,8 +147,8 @@
                 android:id="@+id/message_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dip"
-                android:layout_marginRight="16dip"
+                android:layout_marginLeft="0dip"
+                android:layout_marginRight="0dip"
                 android:background="@android:color/white"
                 android:visibility="gone"
                 />
