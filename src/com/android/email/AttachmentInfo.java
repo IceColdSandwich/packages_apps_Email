@@ -20,7 +20,6 @@ import com.android.emailcommon.internet.MimeUtility;
 import com.android.emailcommon.provider.EmailContent.Attachment;
 import com.android.emailcommon.utility.AttachmentUtilities;
 import com.android.emailcommon.utility.Utility;
-import com.android.email.Preferences;
 
 import android.content.Context;
 import android.content.Intent;
@@ -31,7 +30,6 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.content.SharedPreferences;
 
 import java.util.List;
 
@@ -82,8 +80,6 @@ public class AttachmentInfo {
     public final boolean mAllowInstall;
     /** Reason(s) why this attachment is denied from being viewed */
     public final int mDenyFlags;
-    /** Access to Shared Preferences */
-    public final SharedPreferences mSharedPreferences;
 
     public AttachmentInfo(Context context, Attachment attachment) {
         this(context, attachment.mId, attachment.mSize, attachment.mFileName, attachment.mMimeType,
@@ -109,7 +105,6 @@ public class AttachmentInfo {
         mId = id;
         mAccountKey = accountKey;
         mFlags = flags;
-        mSharedPreferences = Preferences.getSharedPreferences(context);
         boolean canView = true;
         boolean canSave = true;
         boolean canInstall = false;
@@ -120,51 +115,44 @@ public class AttachmentInfo {
             canSave = false;
         }
 
-        /**
-         * Check if untrusted attachments are allowed or not
-         */
-        if (!mSharedPreferences.getBoolean(Preferences.ALLOW_UNTRUSTED_ATTACHMENTS,
-                Preferences.ALLOW_UNTRUSTED_ATTACHMENTS_DEFAULT)) {
+        // Check for acceptable / unacceptable attachments by MIME-type
+        if ((!MimeUtility.mimeTypeMatches(mContentType,
+                AttachmentUtilities.ACCEPTABLE_ATTACHMENT_VIEW_TYPES)) ||
+            (MimeUtility.mimeTypeMatches(mContentType,
+                    AttachmentUtilities.UNACCEPTABLE_ATTACHMENT_VIEW_TYPES))) {
+            canView = false;
+        }
 
-            // Check for acceptable / unacceptable attachments by MIME-type
-            if ((!MimeUtility.mimeTypeMatches(mContentType,
-                    AttachmentUtilities.ACCEPTABLE_ATTACHMENT_VIEW_TYPES)) ||
-                (MimeUtility.mimeTypeMatches(mContentType,
-                        AttachmentUtilities.UNACCEPTABLE_ATTACHMENT_VIEW_TYPES))) {
-                canView = false;
-            }
+        // Check for unacceptable attachments by filename extension
+        String extension = AttachmentUtilities.getFilenameExtension(mName);
+        if (!TextUtils.isEmpty(extension) &&
+                Utility.arrayContains(AttachmentUtilities.UNACCEPTABLE_ATTACHMENT_EXTENSIONS,
+                        extension)) {
+            canView = false;
+            canSave = false;
+            denyFlags |= DENY_MALWARE;
+        }
 
-            // Check for unacceptable attachments by filename extension
-            String extension = AttachmentUtilities.getFilenameExtension(mName);
-            if (!TextUtils.isEmpty(extension) &&
-                    Utility.arrayContains(AttachmentUtilities.UNACCEPTABLE_ATTACHMENT_EXTENSIONS,
-                            extension)) {
-                canView = false;
-                canSave = false;
-                denyFlags |= DENY_MALWARE;
-            }
+        // Check for policy restrictions on download
+        if ((flags & Attachment.FLAG_POLICY_DISALLOWS_DOWNLOAD) != 0) {
+            canView = false;
+            canSave = false;
+            denyFlags |= DENY_POLICY;
+        }
 
-            // Check for policy restrictions on download
-            if ((flags & Attachment.FLAG_POLICY_DISALLOWS_DOWNLOAD) != 0) {
-                canView = false;
-                canSave = false;
-                denyFlags |= DENY_POLICY;
-            }
-
-            // Check for installable attachments by filename extension
-            extension = AttachmentUtilities.getFilenameExtension(mName);
-            if (!TextUtils.isEmpty(extension) &&
-                    Utility.arrayContains(AttachmentUtilities.INSTALLABLE_ATTACHMENT_EXTENSIONS,
-                            extension)) {
-                boolean sideloadEnabled;
-                sideloadEnabled = Settings.Secure.getInt(context.getContentResolver(),
-                        Settings.Secure.INSTALL_NON_MARKET_APPS, 0 /* sideload disabled */) == 1;
-                canSave &= sideloadEnabled;
-                canView = canSave;
-                canInstall = canSave;
-                if (!sideloadEnabled) {
-                    denyFlags |= DENY_NOSIDELOAD;
-                }
+        // Check for installable attachments by filename extension
+        extension = AttachmentUtilities.getFilenameExtension(mName);
+        if (!TextUtils.isEmpty(extension) &&
+                Utility.arrayContains(AttachmentUtilities.INSTALLABLE_ATTACHMENT_EXTENSIONS,
+                        extension)) {
+            boolean sideloadEnabled;
+            sideloadEnabled = Settings.Secure.getInt(context.getContentResolver(),
+                    Settings.Secure.INSTALL_NON_MARKET_APPS, 0 /* sideload disabled */) == 1;
+            canSave &= sideloadEnabled;
+            canView = canSave;
+            canInstall = canSave;
+            if (!sideloadEnabled) {
+                denyFlags |= DENY_NOSIDELOAD;
             }
         }
 

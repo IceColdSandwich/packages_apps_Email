@@ -66,12 +66,12 @@ public class Email extends Application {
      * on each new folder and can be incremented with "Load more messages..." by the
      * VISIBLE_LIMIT_INCREMENT
      */
-    public static final int VISIBLE_LIMIT_DEFAULT = 50;
+    public static final int VISIBLE_LIMIT_DEFAULT = 25;
 
     /**
      * Number of additional messages to load when a user selects "Load more messages..."
      */
-    public static final int VISIBLE_LIMIT_INCREMENT = 50;
+    public static final int VISIBLE_LIMIT_INCREMENT = 25;
 
     /**
      * This is used to force stacked UI to return to the "welcome" screen any time we change

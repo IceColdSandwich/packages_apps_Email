@@ -90,8 +90,6 @@
     <string name="compose_action">Compose</string>
     <!-- Menu item/button name -->
     <string name="search_action">Search</string>
-    <!-- Menu item/button name -->
-    <string name="mark_all_read_action">Mark All Read</string>
     <!-- Menu item -->
     <string name="account_settings_action">Account settings</string>
     <!-- Menu item for settings [CHAR LIMIT=40]-->
@@ -735,12 +733,6 @@ as <xliff:g id="filename">%s</xliff:g>.</string>
     <string name="account_setup_options_mail_check_frequency_30min">Every 30 minutes</string>
     <!-- In Account setup options & Account Settings screens, email check frequency option -->
     <string name="account_setup_options_mail_check_frequency_1hour">Every hour</string>
-    <!-- In Account setup options & Account Settings screens, email check frequency option -->
-    <string name="account_setup_options_mail_check_frequency_2hour">Every 2 hours</string>
-    <!-- In Account setup options & Account Settings screens, email check frequency option -->
-    <string name="account_setup_options_mail_check_frequency_4hour">Every 4 hours</string>
-    <!-- In Account setup options & Account Settings screens, email check frequency option -->
-    <string name="account_setup_options_mail_check_frequency_1day">Every day</string>
     <!-- Check box label on "Set up email" screen to make this the default account -->
     <!-- Note, this should usually match the default account summary preference string -->
     <string name="account_setup_options_default_label">Send email from this account by default.</string>
@@ -1176,11 +1168,6 @@ as <xliff:g id="filename">%s</xliff:g>.</string>
     <!-- Message shown in toast when the user taps to clear the lsit of senders
          to automatically show pictures for [CHAR LIMIT=80] -->
     <string name="trusted_senders_cleared">\"Show pictures\" cleared.</string>
-
-    <!--  Settings screen, allow untrusted attachments title -->
-    <string name="general_preference_allow_untrusted_attachments_title">Untrusted attachements</string>
-    <!--  Settings screen, allow untrusted attachments summary -->
-    <string name="general_preference_allow_untrusted_attachments_summary">Allow upload / download of untrusted filetypes.</string>
 
     <!-- Generic string for "current position" / "total number" [CHAR LIMIT=12] -->
     <string name="position_of_count"><xliff:g example="1">%1$d</xliff:g> of <xliff:g
